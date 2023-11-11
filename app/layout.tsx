@@ -1,22 +1,35 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import LoginObserver from "./components/login-observer";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'nextjs-supabase-ts-blog',
-  description: 'my blog',
-}
+  title: "nextjs-supabase-ts-blog",
+  description: "my blog",
+};
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: {
-  children: React.ReactNode
-}) {
+  children: React.ReactNode;
+}) => {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <LoginObserver />
+        <div className="flex flex-col min-h-screen">
+        <main className="flex-1 container max-w-screen-sm mx-auto px-1 py-5">{children}</main>
+        <footer>
+          <div className="py-5 border-gray-300 flex justify-center items-center">
+            My Blog
+          </div>
+        </footer>
+        </div>
+      </body>
     </html>
-  )
+  );
 }
+
+export default RootLayout;
