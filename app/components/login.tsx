@@ -34,7 +34,7 @@ const Login = () => {
   } = useForm({
     defaultValues: {
       email: "",
-      password: ""
+      password: "",
     },
     resolver: zodResolver(schema),
   });
@@ -68,12 +68,14 @@ const Login = () => {
         <div className="flex flex-col items-center my-5">
           <div className="font-bold text-xl">ログイン</div>
           <input
+            type="email"
             className="border rounded-md focus:outline-none my-2 text-lg "
             placeholder="メールアドレス"
             id="email"
             {...register("email", { required: true })}
           ></input>
           <input
+            type="password"
             className="border rounded-md focus:outline-none my-2 text-lg"
             placeholder="パスワード"
             id="password"

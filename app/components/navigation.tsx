@@ -18,10 +18,10 @@ const Navigation = ({ session }: { session: Session | null }) => {
             </div>
           ) : (
             <div className="flex items-center space-x-5">
-              <Link href="auth/login" className="cursor-pointer">
+              <Link href="/auth/login" className="cursor-pointer">
                 ログイン
               </Link>
-              <Link href="auth/signup" className="cursor-pointer">
+              <Link href="/auth/signup" className="cursor-pointer">
                 サインアップ
               </Link>
             </div>
