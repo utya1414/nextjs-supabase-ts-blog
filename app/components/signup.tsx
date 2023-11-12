@@ -3,7 +3,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import Loading from "@/app/loading";
 import { useState } from "react";
 
@@ -39,7 +39,7 @@ const Signup = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: Schema) => {
+  const onSubmit: SubmitHandler<Schema> = async (data: Schema) => {
     setLoading(true);
     try {
       const { error: errorSignup } = await supabase.auth.signUp({
@@ -70,6 +70,7 @@ const Signup = () => {
       setSendMessage("確認メールを送信しました");
     } catch (error) {
       setMessage("エラーが発生しました" + error);
+      return;
     } finally {
       setLoading(false);
       router.refresh();
@@ -103,7 +104,9 @@ const Signup = () => {
             {...register("password", { required: true })}
           ></input>
           {message && <div className="text-red-500 text-sm">{message}</div>}
-          {sendMessage && <div className="text-green-500 text-sm">{sendMessage}</div>}
+          {sendMessage && (
+            <div className="text-green-500 text-sm">{sendMessage}</div>
+          )}
           {loading ? (
             <Loading />
           ) : (

@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from "react";
-import Link from "next/link";
 import Loading from "@/app/loading";
 
 import type { Database } from "@/lib/database.types";
@@ -35,7 +34,7 @@ const Login = () => {
   } = useForm({
     defaultValues: {
       email: "",
-      password: "",
+      password: ""
     },
     resolver: zodResolver(schema),
   });
@@ -43,23 +42,23 @@ const Login = () => {
   const onSubmit: SubmitHandler<Schema> = async (data: Schema) => {
     setLoading(true);
     try {
-        const { error } = await supabase.auth.signInWithPassword({
-            email: data.email,
-            password: data.password,
-        })
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
 
-        if (error) {
-            setMessage('パスワードでの認証の過程でエラーが発生しました')
-            return
-        }
+      if (error) {
+        setMessage("パスワードでの認証の過程でエラーが発生しました");
+        return;
+      }
 
-        router.push('/')
+      router.push("/");
     } catch (error) {
-        setMessage('エラーが発生しました' + error)
-        return
+      setMessage("エラーが発生しました" + error);
+      return;
     } finally {
-        setLoading(false)
-        router.refresh()
+      setLoading(false);
+      router.refresh();
     }
   };
 
