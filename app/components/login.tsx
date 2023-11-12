@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { createCilentComponentClient } from "@/supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -24,7 +23,7 @@ const schema = z.object({
 
 // ログインページ
 const Login = () => {
-  const supabase = createCilentComponentClient<Database>({ cookies });
+  const supabase = createClientComponentClient<Database>();
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,9 +40,61 @@ const Login = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<Schema> = async (data) => {};
+  const onSubmit: SubmitHandler<Schema> = async (data: Schema) => {
+    setLoading(true);
+    try {
+        const { error } = await supabase.auth.signInWithPassword({
+            email: data.email,
+            password: data.password,
+        })
 
-  return <div>ログイン</div>;
+        if (error) {
+            setMessage('パスワードでの認証の過程でエラーが発生しました')
+            return
+        }
+
+        router.push('/')
+    } catch (error) {
+        setMessage('エラーが発生しました' + error)
+        return
+    } finally {
+        setLoading(false)
+        router.refresh()
+    }
+  };
+
+  return (
+    <div className="">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col items-center my-5">
+          <div className="font-bold text-xl">ログイン</div>
+          <input
+            className="border rounded-md focus:outline-none my-2 text-lg "
+            placeholder="メールアドレス"
+            id="email"
+            {...register("email", { required: true })}
+          ></input>
+          <input
+            className="border rounded-md focus:outline-none my-2 text-lg"
+            placeholder="パスワード"
+            id="password"
+            {...register("password", { required: true })}
+          ></input>
+          {message && <div className="text-red-500 text-sm">{message}</div>}
+          {loading ? (
+            <Loading />
+          ) : (
+            <button
+              type="submit"
+              className="font-bold my-5 py-2 px-2 border rounded-lg text-white bg-sky-500 shadow-lg hover:bg-sky-600 "
+            >
+              ログイン
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default Login;
