@@ -1,10 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import type { Session } from "@supabase/auth-helpers-nextjs";
+import useStore from "@/store";
+import type { UserType } from "@/store";
 
-const Navigation = ({ session }: { session: Session | null }) => {
+const Navigation = ({
+  session,
+  user,
+}: {
+  session: Session | null;
+  user: UserType | null;
+}) => {
+  const { setUser } = useStore();
+  useEffect(() => {
+    setUser({
+      id: session ? session.user.id : "",
+      email: session ? session.user.email! : "",
+      name: session && user ? user.name : "",
+    });
+  }, [session, setUser, user]);
   return (
     <header className="shadow-lg shadow-gray-100">
       <div className=" flex justify-between items-center py-5 container mx-auto">
