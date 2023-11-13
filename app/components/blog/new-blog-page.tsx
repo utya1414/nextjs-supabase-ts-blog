@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -12,8 +12,8 @@ import { v4 as uuidv4 } from "uuid";
 
 type Schema = z.infer<typeof schema>;
 const schema = z.object({
-  title: z.string().min(1),
-  content: z.string().min(1),
+  title: z.string().min(1, { message: "タイトルを入力してください" }),
+  content: z.string().min(1, { message: "本文を入力してください" }),
 });
 
 const NewBlogPage = () => {
@@ -44,7 +44,7 @@ const NewBlogPage = () => {
     setImage(files[0]);
   }, []);
 
-  const onSubmit = async (data: Schema) => {
+  const onSubmit : SubmitHandler<Schema> = async (data: Schema) => {
     setLoading(true);
     try {
       if (user?.id) {
@@ -81,9 +81,10 @@ const NewBlogPage = () => {
       return;
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
-
+  
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -109,6 +110,7 @@ const NewBlogPage = () => {
         {...register("content", { required: true })}
       />
       {message && <div className="text-red-500 text-sm">{message}</div>}
+
       <div className="flex ">
         {loading ? (
           <Loading />
