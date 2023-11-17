@@ -9,6 +9,7 @@ import Loading from "@/app/loading";
 import useStore from "@/store";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import PreviewBlog from "./preview-md";
 
 type Schema = z.infer<typeof schema>;
 const schema = z.object({
@@ -23,6 +24,8 @@ const NewBlogPage = () => {
   const [image, setImage] = useState<File>(null!);
   const { user } = useStore();
   const router = useRouter();
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
 
   const {
     register,
@@ -84,8 +87,14 @@ const NewBlogPage = () => {
       router.refresh();
     }
   };
-  
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  }
+  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  }
   return (
+    <div className="flex">
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col min-h-screen items-center"
@@ -96,6 +105,7 @@ const NewBlogPage = () => {
         placeholder="タイトル"
         className="border border-gray-300 rounded-md w-4/5 my-2 py-2 px-1"
         {...register("title", { required: true })}
+        onChange={onTitleChange}
       ></input>
       <input
         id="image"
@@ -108,6 +118,7 @@ const NewBlogPage = () => {
         placeholder="本文"
         className="flex-1 w-4/5 border border-gray-200 rounded py-2 px-1 my-2"
         {...register("content", { required: true })}
+        onChange={onContentChange}
       />
       {message && <div className="text-red-500 text-sm">{message}</div>}
 
@@ -125,6 +136,8 @@ const NewBlogPage = () => {
         <ReturnTopPage />
       </div>
     </form>
+    <PreviewBlog title={title} info={content} />
+    </div>
   );
 };
 
