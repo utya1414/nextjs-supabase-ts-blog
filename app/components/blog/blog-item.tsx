@@ -24,18 +24,10 @@ const BlogItem = (blog: BlogListType) => {
       />
       <div className="text-gray-500 font-bold">{date}</div>
       <div className="font-bold text-lg">{blog.title}</div>
-      <div className="text-gray-500 font-bold">{blog.content}</div>
+      <div className="text-gray-500 font-bold">{content}</div>
       <div className="font-bold">{blog.name}</div>
     </Link>
   );
 };
 
 export default BlogItem;
-
-// id: string;
-// created_at: string;
-// title: string;
-// content: string;
-// user_id: string;
-// image_url: string;
-// name: string | null;
