@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/database.types";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import MarkDown from "./MarkDown";
 
 const BlogDetail = (blog: BlogListType) => {
   const date = format(new Date(blog.created_at), "yyyy/MM/dd");
@@ -47,12 +49,12 @@ const BlogDetail = (blog: BlogListType) => {
             <>
               <Link
                 href={`/blog/${blog.id}/edit`}
-                className="w-12 bg-sky-500 text-white font-bold text-sm flex text-center items-center py-2 px-2 rounded-md cursor-pointer shadow-md hover:bg-sky-600"
+                className="py-2 px-2 bg-black-gradient font-semibold rounded-md cursor-pointer"
               >
                 編集
               </Link>
               <button
-                className="w-12 bg-sky-500 text-white font-bold text-sm flex text-center items-center py-2 px-2 rounded-md cursor-pointer shadow-md hover:bg-sky-600"
+                className={`py-2 px-2 bg-black-gradient font-semibold rounded-md cursor-pointer`}
                 onClick={DeleteBlog}
               >
                 削除
@@ -71,12 +73,12 @@ const BlogDetail = (blog: BlogListType) => {
   }, [user]);
 
   return (
-    <div>
+    <div className="bg-primary">
       <div>{date}</div>
       <div>{blog.title}</div>
       <div>{blog.name}</div>
 
-      <div>{blog.content}</div>
+      <MarkDown content={blog.content}/>
       {renderButton()}
       <ReturnTopPage />
     </div>

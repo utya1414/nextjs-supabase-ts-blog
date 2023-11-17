@@ -16,6 +16,8 @@
 
 * {
   scroll-behavior: smooth;
+  color: white;
+  background-color: "#00040f";
 }
 
 .text-gradient {
@@ -53,6 +55,10 @@
     #6d6d6d -78.47%,
     #11101d 91.61%
   );
+}
+
+.bg-black-gradient:hover {
+  filter: brightness(1.5);
 }
 
 .bg-black-gradient-2 {
