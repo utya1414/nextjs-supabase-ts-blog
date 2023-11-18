@@ -17,7 +17,7 @@ const BlogList = async () => {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-3 gap-2">
         {await Promise.all(
           blogsData.map(async (blogData) => {
             const { data: userData } = await supabase

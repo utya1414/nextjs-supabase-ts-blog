@@ -10,11 +10,10 @@ const MarkDown = ({ content }: { content: string }) => {
       <ReactMarkdown
         remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[[rehypeKatex, { output: "mathml" }]]}
-        className="text-white prose dark:prose-invert"
+        className="text-white prose"
       >
         {content}
       </ReactMarkdown>
-      <div className={`bg-primary`}>test</div>
     </>
   );
 };

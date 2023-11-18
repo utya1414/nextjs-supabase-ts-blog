@@ -17,7 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body className={inter.className}>
         <div className="flex flex-col min-h-screen bg-primary relative ">
           <LoginObserver />
-          <main className="flex-1 px-1 py-5 relative z-10">{children}</main>
+          <main className="flex-1 relative z-10">{children}</main>
           <footer className="relative z-10">
             <div className="py-5 flex flex-col items-center mx-10">
               <p className="text-sm">

@@ -24,7 +24,7 @@ const Navigation = ({
   return (
     <header className="bg-gray-gradient w-full">
       <div className=" flex justify-between items-center py-5 container mx-auto">
-        <Link href="/" className="mx-5 font-bold text-4xl cursor-pointer text-gradient ">
+        <Link href="/" className="mx-5 font-bold font-poppins text-5xl cursor-pointer text-gradient ">
           Jitumu
         </Link>
         <div className="font-bold text-md">
