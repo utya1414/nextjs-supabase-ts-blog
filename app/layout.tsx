@@ -15,14 +15,27 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-primary relative ">
           <LoginObserver />
-          <main className="flex-1 px-1 py-5">{children}</main>
-          <footer>
-            <div className="py-5 border-gray-300 flex justify-center items-center">
-              My Blog
+          <main className="flex-1 px-1 py-5 relative z-10">{children}</main>
+          <footer className="relative z-10">
+            <div className="py-5 flex flex-col items-center mx-10">
+              <p className="text-sm">
+                Contact{" "}
+                <a
+                  href="/cusomer"
+                  className="hover:underline hover:underline-offset-2"
+                >
+                  Customer Service
+                </a>
+              </p>
+              <p className="text-sm text-gray-400">
+                Copyright © 2023-2023 Jitumu All Rights Reserved.
+              </p>
             </div>
           </footer>
+          <div className="absolute z-0 w-[40%] h-[35%] top-0 pink__gradient" />
+          <div className="absolute z-0 w-[50%] h-[50%] right-20 bottom-20 blue__gradient" />
         </div>
       </body>
     </html>

@@ -22,18 +22,16 @@ const Navigation = ({
     });
   }, [session, setUser, user]);
   return (
-    <header className="shadow-lg shadow-gray-100">
+    <header className="bg-gray-gradient w-full">
       <div className=" flex justify-between items-center py-5 container mx-auto">
-        <Link href="/" className="font-bold text-xl cursor-pointer">
-          My Blog
+        <Link href="/" className="mx-5 font-bold text-4xl cursor-pointer text-gradient ">
+          Jitumu
         </Link>
         <div className="font-bold text-md">
           {session ? (
-            <div className="cursor-pointer">
-              <Link href="/">ログイン中</Link>
-            </div>
+              <Link href="/" className="cursor-pointer mx-5">ログイン中</Link>
           ) : (
-            <div className="flex items-center space-x-5">
+            <div className="flex items-center space-x-5 ">
               <Link href="/auth/login" className="cursor-pointer">
                 ログイン
               </Link>
