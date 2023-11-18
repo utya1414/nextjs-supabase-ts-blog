@@ -10,7 +10,7 @@ const MarkDown = ({ content }: { content: string }) => {
       <ReactMarkdown
         remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[[rehypeKatex, { output: "mathml" }]]}
-        className="text-white prose"
+        className="text-white prose min-h-screen"
       >
         {content}
       </ReactMarkdown>

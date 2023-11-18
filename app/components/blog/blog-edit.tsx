@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import type { Database } from "@/lib/database.types";
 import ReturnTopPage from "./return-top-page";
+import PreviewBlog from "./preview-md";
 
 type BlogType = Database["public"]["Tables"]["blogs"]["Row"];
 
@@ -100,10 +101,10 @@ const EditBlog = ({ blog }: PageProps) => {
   const renderBlog = () => {
     if (isMyBlog) {
       return (
-        <div>
+        <div className="flex">
           <form
             onSubmit={onSubmit}
-            className="flex flex-col min-h-screen items-center"
+            className="flex flex-col w-1/2 min-h-screen items-center"
           >
             <input
               id="title"
@@ -111,12 +112,12 @@ const EditBlog = ({ blog }: PageProps) => {
               placeholder="タイトル"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="border border-gray-300 rounded-md w-4/5 my-2 py-2 px-1"
+              className="bg-gray-gradient w-full border border-gray-300 rounded-md py-2 px-1"
             ></input>
             <input
               id="image"
               type="file"
-              className="my-1 border border-gray-200 rounded-md file:border-none file:hover:bg-gray-300 file:cursor-pointer"
+              className="w-full border border-gray-200 rounded-md file:border-none file:hover:bg-gray-300 file:cursor-pointer"
               onChange={onUploadImage}
             ></input>
             <textarea
@@ -124,7 +125,7 @@ const EditBlog = ({ blog }: PageProps) => {
               placeholder="本文"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="flex-1 w-4/5 border border-gray-200 rounded py-2 px-1 my-2"
+              className="flex-1 w-full bg-gray-gradient border border-gray-200 rounded py-2 px-1"
             />
             {message && <div className="text-red-500 text-sm">{message}</div>}
 
@@ -134,7 +135,7 @@ const EditBlog = ({ blog }: PageProps) => {
               ) : (
                 <button
                   type="submit"
-                  className="bg-sky-500 text-white font-bold py-2 px-2 rounded-md hover:bg-sky-600 mr-2"
+                  className="bg-black-gradient text-white font-bold py-2 px-2 rounded-md hover:bg-sky-600 mr-2"
                 >
                   編集
                 </button>
@@ -142,6 +143,7 @@ const EditBlog = ({ blog }: PageProps) => {
               <ReturnTopPage />
             </div>
           </form>
+          <PreviewBlog title={title} info={content} />
         </div>
       );
     }

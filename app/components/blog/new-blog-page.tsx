@@ -97,26 +97,26 @@ const NewBlogPage = () => {
     <div className="flex">
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col min-h-screen items-center"
+      className="w-1/2 flex flex-col items-center min-h-screen"
     >
       <input
         id="title"
         type="text"
         placeholder="タイトル"
-        className="border border-gray-300 rounded-md w-4/5 my-2 py-2 px-1"
+        className="border bg-primary rounded-md py-2 px-1 w-full"
         {...register("title", { required: true })}
         onChange={onTitleChange}
       ></input>
       <input
         id="image"
         type="file"
-        className="my-1 border border-gray-200 rounded-md file:border-none file:hover:bg-gray-300 file:cursor-pointer"
+        className="my-1 w-full border border-dimWhite rounded-md file:border-none file:hover:bg-gray-300 file:cursor-pointer"
         onChange={onUploadImage}
       ></input>
       <textarea
         id="content"
         placeholder="本文"
-        className="flex-1 w-4/5 border border-gray-200 rounded py-2 px-1 my-2"
+        className="flex-1 w-full border bg-primary rounded py-2 px-1"
         {...register("content", { required: true })}
         onChange={onContentChange}
       />
@@ -128,7 +128,7 @@ const NewBlogPage = () => {
         ) : (
           <button
             type="submit"
-            className="bg-sky-500 text-white font-bold py-2 px-2 rounded-md hover:bg-sky-600 mr-2"
+            className="bg-black-gradient text-white font-bold py-2 px-2 rounded-md mr-2"
           >
             投稿
           </button>
