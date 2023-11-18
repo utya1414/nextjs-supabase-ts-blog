@@ -31,7 +31,7 @@ const Navigation = ({
       </Link>
       <div className="font-bold text-md">
         {session ? (
-          <Link href="/" className="cursor-pointer mx-5">
+          <Link href="/profile/introduce" className="cursor-pointer mx-5">
             ログイン中
           </Link>
         ) : (
