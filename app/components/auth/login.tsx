@@ -69,14 +69,14 @@ const Login = () => {
           <div className="font-bold text-xl">ログイン</div>
           <input
             type="email"
-            className="border rounded-md focus:outline-none my-2 text-lg "
+            className="bg-gray-gradient rounded-md my-2 py-1 px-2 text-lg "
             placeholder="メールアドレス"
             id="email"
             {...register("email", { required: true })}
           ></input>
           <input
             type="password"
-            className="border rounded-md focus:outline-none my-2 text-lg"
+            className="rounded-md bg-gray-gradient my-2 py-1 px-2 text-lg"
             placeholder="パスワード"
             id="password"
             {...register("password", { required: true })}
@@ -87,7 +87,7 @@ const Login = () => {
           ) : (
             <button
               type="submit"
-              className="font-bold my-5 py-2 px-2 border rounded-lg text-white bg-sky-500 shadow-lg hover:bg-sky-600 "
+              className="font-bold my-5 py-2 px-2 rounded-lg text-white bg-black-gradient"
             >
               ログイン
             </button>
