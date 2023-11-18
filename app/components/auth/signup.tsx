@@ -84,35 +84,35 @@ const Signup = () => {
           <div className="font-bold text-xl">サインアップ</div>
           <input
             type="text"
-            className="border rounded-md focus:outline-none my-2 text-lg"
+            className="rounded-md bg-gray-gradient my-2 py-1 px-2 text-lg"
             placeholder="名前"
             id="name"
             {...register("name", { required: true })}
           ></input>
           <input
             type="email"
-            className="border rounded-md focus:outline-none my-2 text-lg "
+            className="rounded-md bg-gray-gradient my-2 py-1 px-2 text-lg "
             placeholder="メールアドレス"
             id="email"
             {...register("email", { required: true })}
           ></input>
           <input
             type="password"
-            className="border rounded-md focus:outline-none my-2 text-lg"
+            className="rounded-md bg-gray-gradient my-2 py-1 px-2 text-lg"
             placeholder="パスワード"
             id="password"
             {...register("password", { required: true })}
           ></input>
           {message && <div className="text-red-500 text-sm">{message}</div>}
           {sendMessage && (
-            <div className="text-green-500 text-sm">{sendMessage}</div>
+            <div className="text-gradient text-sm">{sendMessage}</div>
           )}
           {loading ? (
             <Loading />
           ) : (
             <button
               type="submit"
-              className="font-bold my-5 py-2 px-2 border rounded-lg text-white bg-sky-500 shadow-lg hover:bg-sky-600 "
+              className="font-bold my-5 py-2 px-2 rounded-lg text-white bg-black-gradient"
             >
               確認メール送信
             </button>
