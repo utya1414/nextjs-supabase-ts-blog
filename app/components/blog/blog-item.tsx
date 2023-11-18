@@ -14,7 +14,7 @@ const BlogItem = (blog: BlogListType) => {
 
   const date = format(new Date(blog.created_at), "yyyy/MM/dd");
   return (
-    <Link href={`/blog/${blog.id}`} className="bg-gray-200 py-2 px-2 rounded-md shadow-md hover:brightness-90 text-sm">
+    <Link href={`/blog/${blog.id}`} className="bg-gray-gradient py-2 px-2 rounded-md shadow-md hover:brightness-90 text-sm">
       <Image
         src={blog.image_url}
         alt="image"
