@@ -73,10 +73,10 @@ const BlogDetail = (blog: BlogListType) => {
   }, [user]);
 
   return (
-    <div className="bg-primary">
-      <div>{date}</div>
-      <div>{blog.title}</div>
-      <div>{blog.name}</div>
+    <div className="bg-gray-gradient px-2 py-2 rounded-md border-2 border-dimWhite">
+      <div className="text-gray-500 text-sm">{date}</div>
+      <div className="text-gradient text-4xl font-bold">{blog.title}</div>
+      <div className="">created by <span className="font-semibold">{blog.name}</span></div>
 
       <MarkDown content={blog.content}/>
       {renderButton()}

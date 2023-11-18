@@ -22,10 +22,10 @@ const BlogItem = (blog: BlogListType) => {
         width={300}
         height={200}
       />
-      <div className="text-gray-500 font-bold">{date}</div>
-      <div className="font-bold text-lg">{blog.title}</div>
-      <div className="text-gray-500 font-bold">{content}</div>
-      <div className="font-bold">{blog.name}</div>
+      <div className="text-gray-500 font-semibold">{date}</div>
+      <div className="font-bold text-xl">{blog.title}</div>
+      <div className="text-gray-500 font-semibold">{content}</div>
+      <div className="font-semibold">{blog.name}</div>
     </Link>
   );
 };
