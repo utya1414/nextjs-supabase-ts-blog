@@ -18,7 +18,7 @@ const PageToBlogDetail = async ({ params }: PageProps) => {
     .select()
     .eq("id", params.blogId)
     .single();
-
+    
   if (!blogData) {
     return notFound();
   }

@@ -14,7 +14,8 @@ const LoginObserver = async () => {
   } = await supabase.auth.getSession();
 
   let user = null;
-
+  let profile = null;
+  
   if (session) {
     const { data: currentUser } = await supabase
       .from("users")
@@ -22,9 +23,14 @@ const LoginObserver = async () => {
       .eq("id", session.user.id)
       .single();
 
+    const { data: currentProfile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .single();
     user = currentUser;
   }
-
+  
   return <Navigation session={session} user={user}/>;
 };
 
