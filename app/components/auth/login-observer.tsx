@@ -15,7 +15,7 @@ const LoginObserver = async () => {
 
   let user = null;
   let profile = null;
-  
+
   if (session) {
     const { data: currentUser } = await supabase
       .from("users")
@@ -28,10 +28,12 @@ const LoginObserver = async () => {
       .select("*")
       .eq("user_id", session.user.id)
       .single();
+
     user = currentUser;
+    profile = currentProfile;
   }
   
-  return <Navigation session={session} user={user}/>;
+  return <Navigation session={session} user={user} profile={profile}/>;
 };
 
 export default LoginObserver;
