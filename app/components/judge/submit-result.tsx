@@ -3,20 +3,8 @@ import React, { use, useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import useStore from "@/store";
 import { set } from "date-fns";
+import Judge from "./Judge";
 
-type ResultProps = {
-  id: string;
-  status: string;
-  error: string;
-};
-type CreateProps = {
-  source_code: string;
-  language: string;
-  input: string;
-  longpoll: boolean;
-  longpoll_timeout: string;
-  api_key: string;
-};
 type DetailProps = {
   id: string;
   language: string;
@@ -34,97 +22,54 @@ type DetailProps = {
   memory: string;
   result: string;
 };
+
 const SubmitResult = () => {
   const supabase = createClientComponentClient();
-  const { user } = useStore();
+  const [user_id, setUser_id] = useState("");
+  const [blog_id, setBlog_id] = useState("");
+
   const [detail, setDetail] = useState<DetailProps>();
   const [error, setError] = useState("");
-  useEffect(() => {
-    const dataJson = sessionStorage.getItem("data");
-    const data = JSON.parse(dataJson!);
-    if (!data) {
-      setError("データがありません");
-      return;
+
+  const [testcases, setTestcases] = useState<string[]>([]);
+  const getTestcases = async () => {
+    // const { data, error } = await supabase
+    //   .from("testcases")
+    //   .select("*")
+    //   .eq("blog_id", blog_id)
+    //   .single();
+    // if (error) {
+    //   setError(error.message);
+    //   return;
+    // }
+    const data = {
+      testcase: ["1 1 2", "2 2 4", "3 3 6"],
     }
-    console.log("data");
-    console.log(data);
-    const paizaData = {
-      source_code: data.code,
-      language: data.language,
-      input: "hello world",
-      longpoll: true,
-      longpoll_timeout: "2",
-      api_key: "guest",
-    };
-    const setSubmissions = async () => {
-      await postData(paizaData)
-        .then((data) => {
-          const processGetDetail = () => {
-            const detailData = getDetails(data.id);
-            console.log("detailData");
-            console.log(detailData);
-            return detailData;
-          };
-          return processGetDetail();
-        })
-        .then((detail) => {
-          const insertSubmissions = async () => {
-            const { error: insertError } = await supabase
-              .from("submissions")
-              .insert({
-                user_id: user?.id,
-                blogs_id: data.blog_id,
-                code: data.code,
-                result: detail.result,
-              });
+    setTestcases(data.testcase);
+  };
 
-            if (insertError) {
-              setError("エラーが発生しました" + insertError.message);
-              return;
-            }
-            console.log("insert success");
-          };
-          console.log(user?.id);
-          console.log(data.blog_id);
-          console.log(data.code)
-          console.log(detail.result)
-          insertSubmissions();
-        });
-    };
-    setSubmissions();
+  useEffect(() => {
+    const submitInfo = sessionStorage.getItem("submitInfo");
+    const submitInfoJson = JSON.parse(submitInfo!);
+    setDetail(submitInfoJson.detail);
+    setUser_id(submitInfoJson.user_id);
+    setBlog_id(submitInfoJson.blog_id);
+    console.log(submitInfoJson);
+    getTestcases();
   }, []);
-
-  const postData = async (paizaData: CreateProps) => {
-    const url = "http://api.paiza.io/runners/create";
-    const res = await fetch(url, {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      redirect: "follow",
-      referrerPolicy: "no-referrer",
-      body: JSON.stringify(paizaData),
-    });
-    return res.json();
-  };
-
-  const getStatus = async (sessionId: string) => {
-    const url = `http://api.paiza.io/runners/get_status?api_key=guest&id=${sessionId}`;
-    const res = await fetch(url);
-    return res.json();
-  };
-  const getDetails = async (sessionId: string) => {
-    const url = `http://api.paiza.io/runners/get_details?api_key=guest&id=${sessionId}`;
-    const res = await fetch(url);
-    return res.json();
-  };
 
   return (
     <div>
+      {testcases.map((testcase: string, i=0) => {
+          return <Judge key={i++} testcase={testcase} />
+      })}
       SubmitResult
+      {user_id}
+      {blog_id}
+      {detail?.language}
+      {detail?.status}
+      {detail?.time}
+      {detail?.result}
       {error}
     </div>
   );
