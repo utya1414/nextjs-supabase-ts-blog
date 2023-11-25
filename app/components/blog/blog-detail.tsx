@@ -11,6 +11,7 @@ import { Database } from "@/lib/database.types";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import MarkDown from "./MarkDown";
+import Coding from "../judge/submit-code";
 
 const BlogDetail = (blog: BlogListType) => {
   const date = format(new Date(blog.created_at), "yyyy/MM/dd");
@@ -79,6 +80,7 @@ const BlogDetail = (blog: BlogListType) => {
       <div className="">created by <span className="font-semibold">{blog.name}</span></div>
 
       <MarkDown content={blog.content}/>
+      <Coding {...blog} />
       {renderButton()}
       <ReturnTopPage />
     </div>
