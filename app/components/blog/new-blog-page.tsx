@@ -1,74 +1,67 @@
 "use client";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import ReturnTopPage from "./return-top-page";
 import Loading from "@/app/loading";
 import useStore from "@/store";
 import { useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 import PreviewBlog from "./preview-md";
-
-type Schema = z.infer<typeof schema>;
-const schema = z.object({
-  title: z.string().min(1, { message: "タイトルを入力してください" }),
-  content: z.string().min(1, { message: "本文を入力してください" }),
-});
-
+type FormProps = {
+  title: string;
+  content: string;
+  timelimit: string;
+  memorylimit: string;
+  input: string;
+  output: string;
+}
 const NewBlogPage = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const supabase = createClientComponentClient();
-  const [image, setImage] = useState<File>(null!);
   const { user } = useStore();
   const router = useRouter();
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-
+  const [timelimit, setTimelimit] = useState("");
+  const [memorylimit, setMemorylimit] = useState("");
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const blogInfo = {
+    title: title,
+    content: content,
+    timelimit: timelimit,
+    memorylimit: memorylimit,
+    input: input,
+    output: output,
+  }
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Schema>({
+  } = useForm({
     defaultValues: {
       title: "",
       content: "",
+      timelimit: "",
+      memorylimit: "256",
+      input: "",
+      output: "",
     },
-    resolver: zodResolver(schema),
   });
 
-  const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files?.length === 0) {
-      return;
-    }
-    setImage(files[0]);
-  }, []);
-
-  const onSubmit : SubmitHandler<Schema> = async (data: Schema) => {
+  const onSubmit: SubmitHandler<FormProps> = async (data: FormProps) => {
     setLoading(true);
     try {
       if (user?.id) {
-        const { data: storageData, error: storageError } =
-          await supabase.storage
-            .from("blogs")
-            .upload(`${user.id}/${uuidv4()}`, image);
-
-        if (storageError) {
-          setMessage("エラーが発生しました" + storageError);
-          return;
-        }
-        const { data: urlData } = await supabase.storage
-          .from("blogs")
-          .getPublicUrl(storageData.path);
-
         const { error: insertError } = await supabase.from("blogs").insert({
           title: data.title,
           content: data.content,
-          image_url: urlData.publicUrl,
           user_id: user.id,
+          timelimit: data.timelimit,
+          memorylimit: data.memorylimit,
+          input: data.input,
+          output: data.output,
         });
 
         if (insertError) {
@@ -87,56 +80,100 @@ const NewBlogPage = () => {
       router.refresh();
     }
   };
-  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  }
-  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
-  }
   return (
     <div className="flex">
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-1/2 flex flex-col items-center min-h-screen"
-    >
-      <input
-        id="title"
-        type="text"
-        placeholder="タイトル"
-        className="border bg-primary rounded-md py-2 px-1 w-full"
-        {...register("title", { required: true })}
-        onChange={onTitleChange}
-      ></input>
-      <input
-        id="image"
-        type="file"
-        className="my-1 w-full border border-dimWhite rounded-md file:border-none file:hover:bg-gray-300 file:cursor-pointer"
-        onChange={onUploadImage}
-      ></input>
-      <textarea
-        id="content"
-        placeholder="本文"
-        className="flex-1 w-full border bg-primary rounded py-2 px-1"
-        {...register("content", { required: true })}
-        onChange={onContentChange}
-      />
-      {message && <div className="text-red-500 text-sm">{message}</div>}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-1/2 flex flex-col items-center min-h-screen"
+      >
+        <div className="flex items-center ">
+          <div>TITLE:</div>
+          <input
+            id="title"
+            type="text"
+            placeholder="タイトル"
+            className="border bg-primary rounded-md px-1 w-1/2"
+            {...register("title", { required: true })}
+            onChange={(e) => setTitle(e.target.value)}
+          ></input>
+        </div>
+        <div className="">Problem Content:</div>
+        <textarea
+          id="content"
+          placeholder="本文"
+          className="flex-1 w-full border bg-primary rounded py-2 px-1"
+          {...register("content", { required: true })}
+          onChange={(e) => setContent(e.target.value)}
+        />
+        <div className="flex items-center">
+          <div>Time limit:</div>
+          <input
+            id="timelimit"
+            type="text"
+            placeholder="実行時間制限"
+            className="border bg-primary rounded-md px-1 w-1/2"
+            {...register("timelimit", { required: true })}
+            onChange={(e) => setTimelimit(e.target.value)}
+          ></input>
+        </div>
+        <div className="flex items-center">
+          <div>Memory limit:</div>
+          <input
+            id="memorylimit"
+            type="text"
+            placeholder="メモリ制限"
+            className="border bg-primary rounded-md px-1 w-1/2"
+            {...register("memorylimit", { required: true })}
+            onChange={(e) => setMemorylimit(e.target.value)}
+          ></input>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>入力例</th>
+              <th>出力例</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <textarea
+                  id="input"
+                  placeholder="入力例"
+                  className="flex-1 w-full border bg-primary rounded py-2 px-1"
+                  {...register("input", { required: true })}
+                  onChange={(e) => setInput(e.target.value)}
+                />
+              </td>
+              <td>
+                <textarea
+                  id="output"
+                  placeholder="出力例"
+                  className="flex-1 w-full border bg-primary rounded py-2 px-1"
+                  {...register("output", { required: true })}
+                  onChange={(e) => setOutput(e.target.value)}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {message && <div className="text-red-500 text-sm">{message}</div>}
 
-      <div className="flex ">
-        {loading ? (
-          <Loading />
-        ) : (
-          <button
-            type="submit"
-            className="bg-black-gradient text-white font-bold py-2 px-2 rounded-md mr-2"
-          >
-            投稿
-          </button>
-        )}
-        <ReturnTopPage />
-      </div>
-    </form>
-    <PreviewBlog title={title} info={content} />
+        <div className="flex ">
+          {loading ? (
+            <Loading />
+          ) : (
+            <button
+              type="submit"
+              className="bg-black-gradient text-white font-bold py-2 px-2 rounded-md mr-2"
+            >
+              投稿
+            </button>
+          )}
+          <ReturnTopPage />
+        </div>
+      </form>
+      <PreviewBlog info={blogInfo} />
     </div>
   );
 };

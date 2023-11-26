@@ -3,7 +3,7 @@ create table comments (
   user_id uuid references public.users on delete cascade not null,
   blog_id uuid references public.blogs on delete cascade not null,
   content text not null,
-  created_at timestamp with time zone default timezone('uts'::text, now()) not null
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
 alter table comments enable row level security;

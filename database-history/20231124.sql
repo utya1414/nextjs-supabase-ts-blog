@@ -4,7 +4,7 @@ create table submissions (
   blogs_id uuid references public.blogs on delete cascade not null,
   code text,
   status text, 
-  submitted_at timestamp with time zone default timezone('uts'::text, now()) not null
+  submitted_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
 alter table submissions enable row level security;

@@ -3,8 +3,11 @@ export interface BlogListType {
   created_at: string;
   title: string;
   content: string;
+  timelimit: string | null;
+  memorylimit: string | null;
+  input: string | null;
+  output: string | null;
   user_id: string;
-  image_url: string;
   name: string | null | undefined;
 }
 

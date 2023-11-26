@@ -1,5 +1,4 @@
 "use client";
-import { BlogListType } from "@/lib/blog.types";
 import Loading from "@/app/loading";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import useStore from "@/store/index";
@@ -16,6 +15,15 @@ type BlogType = Database["public"]["Tables"]["blogs"]["Row"];
 type PageProps = {
   blog: BlogType;
 };
+
+type InfoProps = {
+  title: string;
+  content: string;
+  timelimit: string;
+  memorylimit: string;
+  input: string;
+  output: string;
+}
 const EditBlog = ({ blog }: PageProps) => {
   const { user } = useStore();
   const router = useRouter();
@@ -23,9 +31,20 @@ const EditBlog = ({ blog }: PageProps) => {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [image, setImage] = useState<File>(null!);
+  const [timelimit, setTimelimit] = useState("");
+  const [memorylimit, setMemorylimit] = useState("");
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
   const [isMyBlog, setIsMyBlog] = useState(false);
   const [message, setMessage] = useState("");
+  const blogInfo = {
+    title: title,
+    content: content,
+    timelimit: timelimit,
+    memorylimit: memorylimit,
+    input: input,
+    output: output,
+  }
 
   useEffect(() => {
     if (user?.id !== blog.user_id) {
@@ -37,49 +56,19 @@ const EditBlog = ({ blog }: PageProps) => {
     }
   }, []);
 
-  const onUploadImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      if (!files || files?.length === 0) {
-        return;
-      }
-      setImage(files[0]);
-    },
-    []
-  );
-
   const onSubmit = async () => {
     setLoading(true);
     try {
       if (user?.id) {
-        let image_url = blog.image_url;
-
-        if (image) {
-          const { data: storageData, error: storageError } =
-            await supabase.storage
-              .from("blogs")
-              .upload(`${user.id}/${uuidv4()}`, image);
-          if (storageError) {
-            setMessage("エラーが発生しました" + storageError);
-            setLoading(false);
-            return;
-          }
-          const fileName = image_url.split("/").slice(-1)[0];
-          await supabase.storage
-            .from("blogs")
-            .remove([`${user?.id}/${fileName}`]);
-
-          const { data: urlData } = await supabase.storage
-            .from("blogs")
-            .getPublicUrl(storageData.path);
-          image_url = urlData.publicUrl;
-        }
         const { error: UpdateError } = await supabase
           .from("blogs")
           .update({
             title,
             content,
-            image_url,
+            timelimit,
+            memorylimit,
+            input,
+            output,
           })
           .eq("id", blog.id);
 
@@ -114,12 +103,6 @@ const EditBlog = ({ blog }: PageProps) => {
               onChange={(e) => setTitle(e.target.value)}
               className="bg-gray-gradient w-full border border-gray-300 rounded-md py-2 px-1"
             ></input>
-            <input
-              id="image"
-              type="file"
-              className="w-full border border-gray-200 rounded-md file:border-none file:hover:bg-gray-300 file:cursor-pointer"
-              onChange={onUploadImage}
-            ></input>
             <textarea
               id="content"
               placeholder="本文"
@@ -127,6 +110,59 @@ const EditBlog = ({ blog }: PageProps) => {
               onChange={(e) => setContent(e.target.value)}
               className="flex-1 w-full bg-gray-gradient border border-gray-200 rounded py-2 px-1"
             />
+            <div className="flex items-center">
+              <div>Time limit:</div>
+              <input
+                id="timelimit"
+                type="text"
+                placeholder="実行時間制限"
+                value={timelimit}
+                className="border bg-primary rounded-md px-1 w-1/2"
+                onChange={(e) => setTimelimit(e.target.value)}
+              ></input>
+            </div>
+            <div className="flex items-center">
+              <div>Memory limit:</div>
+              <input
+                id="memorylimit"
+                type="text"
+                placeholder="メモリ制限"
+                value={memorylimit}
+                className="border bg-primary rounded-md px-1 w-1/2"
+                onChange={(e) => setMemorylimit(e.target.value)}
+              ></input>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>入力例</th>
+                  <th>出力例</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <textarea
+                      id="input"
+                      placeholder="入力例"
+                      value={input}
+                      className="flex-1 w-full border bg-primary rounded py-2 px-1"
+                      onChange={(e) => setInput(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <textarea
+                      id="output"
+                      placeholder="出力例"
+                      value={output}
+                      className="flex-1 w-full border bg-primary rounded py-2 px-1"
+                      onChange={(e) => setOutput(e.target.value)}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
             {message && <div className="text-red-500 text-sm">{message}</div>}
 
             <div className="flex ">
@@ -143,7 +179,7 @@ const EditBlog = ({ blog }: PageProps) => {
               <ReturnTopPage />
             </div>
           </form>
-          <PreviewBlog title={title} info={content} />
+          <PreviewBlog info={blogInfo} />
         </div>
       );
     }
