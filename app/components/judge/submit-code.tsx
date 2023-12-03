@@ -38,108 +38,30 @@ type DetailProps = {
 };
 
 const Coding = (blog: BlogListType) => {
-  const supabase = createClientComponentClient();
   const { user } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState("");
-  const [detail, setDetail] = useState<DetailProps>();
   const [language, setLanguage] = useState("");
-  const [error, setError] = useState("");
+
   const onClickHandler: MouseEventHandler<HTMLButtonElement> = () => {
     setLoading(true);
-    const data = {
+    const parseData = {
       code: code,
       language: language,
       blog_id: blog.id,
-    };
+      user_id: user?.id,
+    }
     try {
-      console.log("data");
-      console.log(data);
-      const paizaData = {
-        source_code: data.code,
-        language: data.language,
-        input: "hello world",
-        longpoll: true,
-        longpoll_timeout: "2",
-        api_key: "guest",
-      };
-      const setSubmissions = async () => {
-        await postData(paizaData)
-          .then((data) => {
-            const processGetDetail = () => {
-              const detailData = getDetails(data.id);
-              console.log("detailData");
-              console.log(detailData);
-              return detailData;
-            };
-            return processGetDetail();
-          })
-          .then((detail) => {
-            const insertSubmissions = async () => {
-              const { error: insertError } = await supabase
-                .from("submissions")
-                .insert({
-                  user_id: user?.id,
-                  blogs_id: data.blog_id,
-                  code: data.code,
-                  result: detail.result,
-                });
-
-              if (insertError) {
-                setError("エラーが発生しました" + insertError.message);
-                return;
-              }
-              console.log("insert success");
-              setDetail(detail);
-            };
-            insertSubmissions();
-            sessionStorage.setItem(
-              "submitInfo",
-              JSON.stringify({
-                user_id: user?.id,
-                blogs_id: data.blog_id,
-                code: data.code,
-                detail: detail,
-              })
-            );
-          });
-      };
-      setSubmissions();
+      console.log("parseData")
+      console.log(parseData)
+      sessionStorage.setItem("submitInfo", JSON.stringify(parseData));
       router.push("/blog/result");
       router.refresh();
     } catch (error) {
       console.log("error:" + error);
     }
     setLoading(false);
-  };
-
-  const postData = async (paizaData: CreateProps) => {
-    const url = "http://api.paiza.io/runners/create";
-    const res = await fetch(url, {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      redirect: "follow",
-      referrerPolicy: "no-referrer",
-      body: JSON.stringify(paizaData),
-    });
-    return res.json();
-  };
-
-  const getStatus = async (sessionId: string) => {
-    const url = `http://api.paiza.io/runners/get_status?api_key=guest&id=${sessionId}`;
-    const res = await fetch(url);
-    return res.json();
-  };
-  const getDetails = async (sessionId: string) => {
-    const url = `http://api.paiza.io/runners/get_details?api_key=guest&id=${sessionId}`;
-    const res = await fetch(url);
-    return res.json();
   };
 
   return (
@@ -152,7 +74,7 @@ const Coding = (blog: BlogListType) => {
         <option value="c" className="text-black">
           c
         </option>
-        <option value="c++" className="text-black">
+        <option value="cpp" className="text-black">
           c++
         </option>
         <option value="java" className="text-black">

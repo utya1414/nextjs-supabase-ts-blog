@@ -37,10 +37,6 @@ const BlogDetail = (blog: BlogListType) => {
       setLoading(false);
       return;
     }
-
-    const fileName = blog.image_url.split("/").slice(-1)[0];
-    await supabase.storage.from("blogs").remove([`${user?.id}/${fileName}`]);
-
     router.push("/");
     router.refresh();
 
