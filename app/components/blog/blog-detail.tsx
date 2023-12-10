@@ -10,7 +10,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/database.types";
 import Link from "next/link";
 import MarkDown from "./MarkDown";
-import Coding from "../judge/submit-code";
+import Coding from "../judge/Coding";
 
 const BlogDetail = (blog: BlogListType) => {
   const date = format(new Date(blog.created_at), "yyyy/MM/dd");

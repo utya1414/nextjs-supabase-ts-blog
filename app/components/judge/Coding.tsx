@@ -2,7 +2,6 @@
 import Loading from "@/app/loading";
 import { BlogListType } from "@/lib/blog.types";
 import useStore from "@/store";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import React, { useState, MouseEventHandler } from "react";
 
@@ -42,21 +41,12 @@ const Coding = (blog: BlogListType) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("");
+  const [language, setLanguage] = useState("c");
 
   const onClickHandler: MouseEventHandler<HTMLButtonElement> = () => {
     setLoading(true);
-    const parseData = {
-      code: code,
-      language: language,
-      blog_id: blog.id,
-      user_id: user?.id,
-    }
     try {
-      console.log("parseData")
-      console.log(parseData)
-      sessionStorage.setItem("submitInfo", JSON.stringify(parseData));
-      router.push("/blog/result");
+      router.push(`/blog/${blog.id}/result?language=` + language+"&code="+code + "&user_id=" + user?.id);
       router.refresh();
     } catch (error) {
       console.log("error:" + error);

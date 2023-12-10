@@ -45,13 +45,16 @@ const EditBlog = ({ blog }: PageProps) => {
     input: input,
     output: output,
   }
-
   useEffect(() => {
     if (user?.id !== blog.user_id) {
       router.push(`/blog/${blog.id}`);
     } else {
       setTitle(blog.title);
       setContent(blog.content);
+      setTimelimit(blog.timelimit!);
+      setMemorylimit(blog.memorylimit!);
+      setInput(blog.input!);
+      setOutput(blog.output!);
       setIsMyBlog(true);
     }
   }, []);
