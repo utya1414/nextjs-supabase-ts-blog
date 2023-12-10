@@ -85,7 +85,7 @@ const processGetDetail = (id: string) => {
 };
 
 const postData = async (paizaData: any) => {
-  const url = "http://api.paiza.io/runners/create";
+  const url = "https://api.paiza.io/runners/create";
   const res = await fetch(url, {
     method: "POST",
     mode: "cors",
@@ -102,7 +102,7 @@ const postData = async (paizaData: any) => {
 };
 
 const getDetails = async (sessionId: string) => {
-  const url = `http://api.paiza.io/runners/get_details?api_key=guest&id=${sessionId}`;
+  const url = `https://api.paiza.io/runners/get_details?api_key=guest&id=${sessionId}`;
   const res = await fetch(url);
   const resJson = await res.json();
   return resJson;
