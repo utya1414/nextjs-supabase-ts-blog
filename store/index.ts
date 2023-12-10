@@ -1,14 +1,22 @@
 import { create } from "zustand"
 import type { Database } from "../lib/database.types"
 export type UserType = Database["public"]["Tables"]["users"]["Row"]
+export type ProfileType = Database["public"]["Tables"]["profiles"]["Row"]
 
+type UserInfo = {
+    id: string
+    email: string
+    name: string | null
+    avatar_url: string | null
+    introduce: string | null
+}
 type StateType = {
-    user: UserType | null
-    setUser: (payload: UserType) => void
+    user: UserInfo | null
+    setUser: (payload: UserInfo) => void
 }
 
 const useStore = create<StateType>((set) => ({
-    user: { id: "", email: "", name: "" },
+    user: { id: "", email: "", name: "", avatar_url: "", introduce: ""},
     setUser: (payload) => set({ user: payload }),
 }))
 

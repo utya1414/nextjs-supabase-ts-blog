@@ -31,8 +31,11 @@ const BlogList = async () => {
               created_at: blogData.created_at,
               title: blogData.title,
               content: blogData.content,
+              timelimit: blogData.timelimit,
+              memorylimit: blogData.memorylimit,
+              input: blogData.input,
+              output: blogData.output,
               user_id: blogData.user_id,
-              image_url: blogData.image_url,
               name: userData?.name,
             };
 

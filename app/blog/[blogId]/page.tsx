@@ -18,7 +18,7 @@ const PageToBlogDetail = async ({ params }: PageProps) => {
     .select()
     .eq("id", params.blogId)
     .single();
-
+    
   if (!blogData) {
     return notFound();
   }
@@ -36,8 +36,11 @@ const PageToBlogDetail = async ({ params }: PageProps) => {
     created_at: blogData.created_at,
     title: blogData.title,
     content: blogData.content,
+    timelimit: blogData.timelimit,
+    memorylimit: blogData.memorylimit,
+    input: blogData.input,
+    output: blogData.output,
     user_id: blogData.user_id,
-    image_url: blogData.image_url,
     name: userData.name,
   };
   return <BlogDetail {...blog} />;

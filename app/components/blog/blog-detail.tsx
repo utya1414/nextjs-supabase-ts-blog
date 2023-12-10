@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/database.types";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
 import MarkDown from "./MarkDown";
+import Coding from "../judge/Coding";
 
 const BlogDetail = (blog: BlogListType) => {
   const date = format(new Date(blog.created_at), "yyyy/MM/dd");
@@ -20,7 +20,14 @@ const BlogDetail = (blog: BlogListType) => {
   const { user } = useStore();
   const supabase = createClientComponentClient<Database>();
   const [isMyBlog, setIsMyBlog] = useState(false);
-
+  const info = {
+    title: blog.title,
+    content: blog.content,
+    timelimit: blog.timelimit,
+    memorylimit: blog.memorylimit,
+    input: blog.input,
+    output: blog.output,
+  }
   const DeleteBlog = async () => {
     setLoading(true);
     const { error } = await supabase.from("blogs").delete().eq("id", blog.id);
@@ -30,10 +37,6 @@ const BlogDetail = (blog: BlogListType) => {
       setLoading(false);
       return;
     }
-
-    const fileName = blog.image_url.split("/").slice(-1)[0];
-    await supabase.storage.from("blogs").remove([`${user?.id}/${fileName}`]);
-
     router.push("/");
     router.refresh();
 
@@ -75,10 +78,10 @@ const BlogDetail = (blog: BlogListType) => {
   return (
     <div className="bg-gray-gradient px-2 py-2 rounded-md border-2 border-dimWhite">
       <div className="text-gray-500 text-sm">{date}</div>
-      <div className="text-gradient text-4xl font-bold">{blog.title}</div>
       <div className="">created by <span className="font-semibold">{blog.name}</span></div>
 
-      <MarkDown content={blog.content}/>
+      <MarkDown info={info}/>
+      <Coding {...blog} />
       {renderButton()}
       <ReturnTopPage />
     </div>
