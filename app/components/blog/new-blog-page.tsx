@@ -23,8 +23,8 @@ const NewBlogPage = () => {
   const router = useRouter();
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  const [timelimit, setTimelimit] = useState("");
-  const [memorylimit, setMemorylimit] = useState("");
+  const [timelimit, setTimelimit] = useState("2");
+  const [memorylimit, setMemorylimit] = useState("256");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const blogInfo = {
@@ -43,7 +43,7 @@ const NewBlogPage = () => {
     defaultValues: {
       title: "",
       content: "",
-      timelimit: "",
+      timelimit: "2",
       memorylimit: "256",
       input: "",
       output: "",
@@ -68,7 +68,6 @@ const NewBlogPage = () => {
           setMessage("エラーが発生しました" + insertError);
           return;
         }
-
         router.push("/");
         router.refresh();
       }
@@ -127,6 +126,7 @@ const NewBlogPage = () => {
             onChange={(e) => setMemorylimit(e.target.value)}
           ></input>
         </div>
+        配列の形で入力してください<br/>
         <table>
           <thead>
             <tr>
@@ -137,15 +137,17 @@ const NewBlogPage = () => {
           <tbody>
             <tr>
               <td>
+                <p>{'["hello", "world"]'}</p>
                 <textarea
                   id="input"
                   placeholder="入力例"
                   className="flex-1 w-full border bg-primary rounded py-2 px-1"
-                  {...register("input", { required: true })}
+                  {...register("input", { required: false })}
                   onChange={(e) => setInput(e.target.value)}
                 />
               </td>
               <td>
+                <p>{'["hello", "world"]'}</p>
                 <textarea
                   id="output"
                   placeholder="出力例"

@@ -25,6 +25,7 @@ const page = async ({
       </div>
     )
   }
+  
   let testcases: TestcaseType[] = []
   for (let i = 0; i < rowdata.input.length; i++) {
     testcases.push({
