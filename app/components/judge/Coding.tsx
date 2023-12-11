@@ -5,37 +5,6 @@ import useStore from "@/store";
 import { useRouter } from "next/navigation";
 import React, { useState, MouseEventHandler } from "react";
 
-type ResultProps = {
-  id: string;
-  status: string;
-  error: string;
-};
-type CreateProps = {
-  source_code: string;
-  language: string;
-  input: string;
-  longpoll: boolean;
-  longpoll_timeout: string;
-  api_key: string;
-};
-type DetailProps = {
-  id: string;
-  language: string;
-  status: string;
-  build_stdout: string;
-  build_stderr: string;
-  build_exit_code: string;
-  build_time: string;
-  build_memory: string;
-  build_result: string;
-  stdout: string;
-  stderr: string;
-  exit_code: string;
-  time: string;
-  memory: string;
-  result: string;
-};
-
 const Coding = (blog: BlogListType) => {
   const { user } = useStore();
   const router = useRouter();
@@ -77,10 +46,12 @@ const Coding = (blog: BlogListType) => {
           JavaScript
         </option>
       </select>
+      <div>
       <textarea
         onChange={(e) => setCode(e.target.value)}
         className="flex-1 w-full bg-gray-gradient border border-gray-200 rounded py-2 px-1"
       />
+      </div>
       {loading ? <Loading /> : <button onClick={onClickHandler}>提出</button>}
     </div>
   );

@@ -3,8 +3,7 @@ import Loading from "@/app/loading";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import useStore from "@/store/index";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useState } from "react";
 
 import type { Database } from "@/lib/database.types";
 import ReturnTopPage from "./return-top-page";
@@ -59,7 +58,8 @@ const EditBlog = ({ blog }: PageProps) => {
     }
   }, []);
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
     setLoading(true);
     try {
       if (user?.id) {
@@ -74,7 +74,6 @@ const EditBlog = ({ blog }: PageProps) => {
             output,
           })
           .eq("id", blog.id);
-
         if (UpdateError) {
           setMessage("エラーが発生しました" + UpdateError.message);
           return;
@@ -176,7 +175,7 @@ const EditBlog = ({ blog }: PageProps) => {
                   type="submit"
                   className="bg-black-gradient text-white font-bold py-2 px-2 rounded-md hover:bg-sky-600 mr-2"
                 >
-                  編集
+                  編集完了
                 </button>
               )}
               <ReturnTopPage />
